@@ -18,7 +18,7 @@ const menu = [
     {title:"Payment", icon:<AccountBalanceIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Events", icon:<EmojiEventsIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Logout", icon:<LogoutIcon sx={{ fontSize: "1.7rem" }} />},
-    {title:"Notifications", icon:<NotificationsActiveIcon sx={{ fontSize: "1.7rem" }} />}
+    // {title:"Notifications", icon:<NotificationsActiveIcon sx={{ fontSize: "1.7rem" }} />}
 ];
 
 const ProfileNavigation = ({open, handleClose}) => {
