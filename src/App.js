@@ -1,24 +1,35 @@
-import logo from './logo.svg';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import './App.css';
+import { DarkTheme } from './Theme/DarkTheme';
+import CustomerRoute from './Routers/CustomerRoute';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from './Component/State/Authentication/Action';
+import { Routes, Route } from "react-router-dom";
+import RestaurantDetails from "./Component/Restaurant/RestaurantDetails";
+import { findCart } from './Component/State/Cart/Action';
+
 
 function App() {
+  const dispatch = useDispatch();
+  const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector((state) => state);
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(auth.jwt || jwt));
+      dispatch(findCart({jwt}));
+    }
+  }, [auth.jwt, dispatch, jwt]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={DarkTheme}>
+      <CssBaseline />
+      <Routes>
+        <Route path="/restaurant/:id" element={<RestaurantDetails />} />
+        <Route path="/*" element={<CustomerRoute />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 

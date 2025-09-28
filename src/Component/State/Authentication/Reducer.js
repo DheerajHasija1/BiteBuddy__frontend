@@ -1,0 +1,60 @@
+import { isPresentInFavorites } from "../../Config/logic";
+import { ADD_TO_FAVORITES_REQUEST, ADD_TO_FAVORITES_SUCCESS, GET_USER_FAILURE, GET_USER_REQUEST, LOGIN_FAILURE, LOGIN_SUCCESS, REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS,ADD_TO_FAVORITES_FAILURE, GET_USER_SUCCESS } from "./ActionType";
+import { LOGIN_REQUEST, LOGOUT, LOGOUT_FAILURE, LOGOUT_REQUEST } from "./ActionType";
+
+
+const initialState = {
+
+    user:null,
+    isLoading:false,
+    error:null,
+    jwt:null,
+    favorites:[],
+    success:null
+}
+export const authReducer = (state=initialState, action) => {
+    switch(action.type){
+        case REGISTER_REQUEST:
+        case LOGIN_SUCCESS:
+        case GET_USER_REQUEST:
+        case ADD_TO_FAVORITES_REQUEST:
+            return{...state,isLoading:true, error:null, success:null};
+
+        case REGISTER_SUCCESS:
+        case LOGIN_SUCCESS:
+            return{...state,
+                isLoading:false,
+                jwt:action.payload, 
+                success:"Authentication Successful"};
+        case GET_USER_SUCCESS:
+            return{
+                ...state,
+                isLoading:false,
+                user:action.payload,
+                favorites:action.payload.favorites
+                };
+        case ADD_TO_FAVORITES_SUCCESS:
+            return{
+                ...state,
+                isLoading:false,
+                favorites:isPresentInFavorites(state.favorites, action.payload) ? state.favorites.filter(item => item.id !== action.payload.id) : [...state.favorites, action.payload],
+                error:null,
+                success:"Added to Favorites"};
+        case LOGOUT:
+            return{ initialState};
+
+        case REGISTER_FAILURE:
+        case LOGIN_FAILURE:
+        case GET_USER_FAILURE:
+        case ADD_TO_FAVORITES_FAILURE:
+            return{
+                ...state,
+                isLoading:false, 
+                error:action.payload, 
+                success:null};
+
+        default:
+            return state;
+    }
+}; 
+export default authReducer;
