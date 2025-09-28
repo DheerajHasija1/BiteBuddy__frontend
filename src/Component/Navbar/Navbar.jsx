@@ -35,7 +35,7 @@ const Navbar = () => {
   return (
     <div className='px-5 z-50 py-[.5rem] bg-[#e91e63] lg:px-20 flex justify-between items-center'>
       <div className='lg:mr-10 cursor-pointer flex items-center space-x-4'>
-        <li onClick={() => navigate("/")} className='logo font-semibold text-gray-300 text-2xl'> BiteBuddy</li>
+        <li onClick={() => navigate("/") } className='logo font-semibold text-2xl cursor-pointer'> BiteBuddy</li>
       </div>
       <div className='flex items-center space-x-4'>
         <IconButton className="text-white">

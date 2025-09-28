@@ -308,12 +308,26 @@ export const getAllCategoriesAction = () => async (dispatch) => {
 
 export const addToFavorites = (restaurantId) => async (dispatch) => {
     try {
-        const response = await apiClient.put(`/restaurants/${restaurantId}/add-favorites`);
+        const jwt = localStorage.getItem("jwt"); 
+        const response = await apiClient.put(
+            `/restaurants/${restaurantId}/add-favorites`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}` 
+                }
+            }
+        );
+        
         dispatch({
-            type: 'ADD_TO_FAVORITES',
+            type: 'ADD_TO_FAVORITES_SUCCESS', 
             payload: response.data
         });
     } catch (error) {
         console.error('Error adding to favorites:', error);
+        dispatch({
+            type: 'ADD_TO_FAVORITES_FAILURE', 
+            payload: error.message
+        });
     }
 };

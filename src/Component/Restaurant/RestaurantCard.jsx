@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -15,13 +15,21 @@ const RestaurantCard = ({ item }) => {
   const { auth } = useSelector((store) => store);
   const [isFavorite, setIsFavorite] = useState(false);
 
+   useEffect(() => {
+    if (auth.user && item) {
+      setIsFavorite(isPresentInFavorites(auth.user.favorites, item.id));
+    }
+  }, [auth.user, item]);
+
   if (!item) return null;
 
   const displayImage = item?.images && item.images.length > 0 
     ? item.images[0] 
     : "https://via.placeholder.com/300x200";
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (e) => {
+     e.preventDefault();          
+     e.stopPropagation();  
     if (!jwt) {
       navigate('/login');
       return;
@@ -52,12 +60,14 @@ const RestaurantCard = ({ item }) => {
           alt={item.name || 'Restaurant'}
         />
 
-        <Chip 
-          size="small"
-          className="absolute top-2 right-2"
-          color={item.open ? "success" : "error"}
-          label={item.open ? "OPEN" : "CLOSED"}
-        />
+        {typeof item.open === 'boolean' && (
+          <Chip 
+            size="small"
+            className="absolute top-2 right-2"
+            color={item.open ? "success" : "error"}
+            label={item.open ? "OPEN" : "CLOSED"}
+          />
+        )}
       </div> 
       
       <div className="p-4 textPart lg:flex w-full justify-between">
@@ -66,7 +76,7 @@ const RestaurantCard = ({ item }) => {
             onClick={handleNavigateToRestaurant} 
             className="font-semibold text-lg cursor-pointer"
           >
-            {item?.name || 'Restaurant Name'}
+            {item?.name || item?.title || 'Restaurant Name'}
           </p>
           <p className="text-gray-500 text-sm">
             {item.description || "Craving it all? Dive into our global flavors."}
@@ -76,7 +86,10 @@ const RestaurantCard = ({ item }) => {
           </p>
         </div>
         <div>
-          <IconButton onClick={handleFavoriteClick}>
+          <IconButton 
+          onClick={handleFavoriteClick}
+          sx={{ zIndex: 10 }} 
+          >
             {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
           </IconButton>
         </div>
