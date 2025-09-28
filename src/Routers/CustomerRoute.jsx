@@ -6,7 +6,6 @@ import Home from '../Component/Home/Home'
 import RestaurantDetails from '../Component/Restaurant/RestaurantDetails'
 import Cart from '../Component/Cart/Cart'
 import Profile from '../Component/Profile/Profile'
-import Register from '../Auth/RegisterForm'
 import Auth from '../Auth/Auth'
 
 const CustomerRoute = () => {
