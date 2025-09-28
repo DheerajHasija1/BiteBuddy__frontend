@@ -1,6 +1,6 @@
 export const topMeals = [
     {
-        image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FPizza&psig=AOvVaw0puNW8w0BSmhZ8h8-OMQsF&ust=1758191014782000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCJium4rK348DFQAAAAAdAAAAABAE",
+        image: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSXmWBPTIqyMGI5voeggB8ckSje7Aaxskr9BCU3DdL37nNS-ujTjPCuStqv0lBE2J88ya0XBDm22LrQqDCer2_tP56xBSA0aQ2SM9hIfdytBg",
         title : "Pizza"
     },
     {
