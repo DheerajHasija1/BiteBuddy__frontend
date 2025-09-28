@@ -16,5 +16,3 @@ const Favorites = () => {
 }
 
 export default Favorites
-// 7:26
-// favourites check logic??
