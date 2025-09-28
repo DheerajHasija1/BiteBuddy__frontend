@@ -13,7 +13,7 @@ export const registerUser = (reqData) => async(dispatch) => {
     try {
         const {data} = await axios.post(`${API_BASE_URL}/auth/signup`, reqData.userData);
         
-        console.log("Register API Request:", reqData.userData); // Add this line for debugging
+        console.log("Register API Request:", reqData.userData); 
         
         if(data.jwt) {
             localStorage.setItem("jwt", data.jwt);
@@ -38,14 +38,17 @@ export const loginUser = createAsyncThunk(
 
         // fetch user profile
         const config = {
-          headers: { Authorization: Bearer ${data.jwt} }
-        };
+                headers: {
+                    "Authorization": `Bearer ${data.jwt}`
+                }
+            };
         const userResponse = await apiClient.get("/users/profile", config);
 
         thunkAPI.dispatch({ type: GET_USER_SUCCESS, payload: userResponse.data });
 
-        return data; // ✅ this becomes fulfilled payload
-      }
+        return data; 
+    }
+      
     }catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
