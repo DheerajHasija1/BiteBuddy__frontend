@@ -7,6 +7,7 @@ import RestaurantDetails from '../Component/Restaurant/RestaurantDetails'
 import Cart from '../Component/Cart/Cart'
 import Profile from '../Component/Profile/Profile'
 import Auth from '../Auth/Auth'
+import PaymentSuccess from '../Component/PaymentSuccess/PaymentSuccess'
 
 const CustomerRoute = () => {
   return (
@@ -18,6 +19,7 @@ const CustomerRoute = () => {
         <Route path="/restaurant/:city/:title/:id" element={<RestaurantDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/my-profile/*" element={<Profile />} />
+        <Route path="/payment/success/:id" element={<PaymentSuccess />} />
       </Routes>
     </div>
   );
