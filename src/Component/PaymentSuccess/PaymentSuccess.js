@@ -2,7 +2,7 @@ import React from 'react';
 
 const PaymentSuccess = () => {
     return(
-        <div style={{backgroundColor: 'green' }}>dheeraj</div>
+        <div>dheeraj</div>
     )
 }
 
