@@ -8,7 +8,9 @@ import { green } from "@mui/material/colors";
 export const PaymentSuccess = () => {
     const navigate =useNavigate();
   return (
-    <div className="min-h-screen px-5" style={{backgroundColor: 'green'}}>
+    <div className="min-h-screen px-5"
+    //  style={{backgroundColor: 'green'}}
+    >
       <div className="flex flex-col items-center justify-center h-[90vh]">
         <div className="box w-full lg:w-1/4 flex flex-col items-center rounded-md py-5">
           <TaskAltIcon sx={{fontSize:"5rem", color:green[500]}}/>
