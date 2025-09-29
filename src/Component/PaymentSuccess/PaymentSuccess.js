@@ -1,6 +1,6 @@
-import react from React;
+import React from 'react';
 
-export const PaymentSuccess =() =>{
+const PaymentSuccess = () => {
     return(
         <div>dheeraj</div>
     )
