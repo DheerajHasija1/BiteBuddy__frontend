@@ -5,9 +5,10 @@ import CustomerRoute from './Routers/CustomerRoute';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './Component/State/Authentication/Action';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import RestaurantDetails from "./Component/Restaurant/RestaurantDetails";
 import { findCart } from './Component/State/Cart/Action';
+import Routers from './Routers/Routers';
 
 
 function App() {
@@ -27,7 +28,8 @@ function App() {
       <CssBaseline />
       <Routes>
         <Route path="/restaurant/:id" element={<RestaurantDetails />} />
-        <Route path="/*" element={<CustomerRoute />} />
+        {/* <Route path="/*" element={<CustomerRoute />} /> */}
+        <Routers />
       </Routes>
     </ThemeProvider>
   );
