@@ -26,11 +26,11 @@ function App() {
   return (
     <ThemeProvider theme={DarkTheme}>
       <CssBaseline />
-      <Routes>
+      {/* <Routes>
         <Route path="/restaurant/:id" element={<RestaurantDetails />} />
-        {/* <Route path="/*" element={<CustomerRoute />} /> */}
-        <Routers />
-      </Routes>
+        <Route path="/*" element={<CustomerRoute />} />
+      </Routes> */}
+      <Routers />
     </ThemeProvider>
   );
 }
