@@ -39,14 +39,7 @@ export const getMenuItemsByRestaurantId = (reqData) => {
     try {
       // Fix URL parameters - use 'foodCategory' instead of 'foodcategory'  
       const response = await apiClient.get(
-        `/food/restaurant/${reqData.restaurantId}?
-        vegetarian=${reqData.vegetarian}&nonvegetarian=${reqData.nonVegetarian}&seasonal=${reqData.seasonal}&foodCategory=${reqData.categoryId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${reqData.jwt}`,
-          },
-        }
-      );
+        `/food/restaurant/${reqData.restaurantId}?veg=${reqData.vegetarian}&seasonal=${reqData.seasonal}&foodCategory=${reqData.categoryId}`);
       console.log("getMenuItemsByRestaurantId", response);
       dispatch({
         type: GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS,

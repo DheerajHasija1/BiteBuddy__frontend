@@ -20,7 +20,7 @@ const MenuCard = ({ item }) => {
         quantity: 1,
         ingredients: selectedIngredients,
       },
-    };
+    };  
     dispatch(addItemToCart(reqData));
     console.log("reqData", reqData);
   };

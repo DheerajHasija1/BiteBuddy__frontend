@@ -6,6 +6,7 @@ import { Card, Chip, IconButton } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { addToFavorites } from '../State/Restaurant/Action';
 import { isPresentInFavorites } from "../Config/logic";
+import { getRestaurantById, getRestaurantsCategory } from "../State/Restaurant/Action";
 
 
 const RestaurantCard = ({ item }) => {
@@ -39,6 +40,7 @@ const RestaurantCard = ({ item }) => {
   };
   // Update the navigation handler
   const handleNavigateToRestaurant = (e) => {
+    // debugger
     e.preventDefault();
     e.stopPropagation();
     if (item && item.id) {
@@ -48,8 +50,9 @@ const RestaurantCard = ({ item }) => {
       }
     }
   }; 
-  return (
+  return (  
     <Card 
+    debugger
       className="w-[18rem] cursor-pointer" 
       onClick={handleNavigateToRestaurant}
     >
