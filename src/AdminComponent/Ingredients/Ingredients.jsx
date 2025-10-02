@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CreateRestaurantForm =() =>{
+const Ingredients =() =>{
     return(
         <div>Dheeraj</div>
     )
 }
 
-export default CreateRestaurantForm;
+export default Ingredients;

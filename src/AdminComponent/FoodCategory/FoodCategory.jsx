@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CreateRestaurantForm =() =>{
+const FoodCategory =() =>{
     return(
         <div>Dheeraj</div>
     )
 }
 
-export default CreateRestaurantForm;
+export default FoodCategory;
