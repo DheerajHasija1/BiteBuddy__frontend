@@ -16,13 +16,13 @@ const CustomerRoute = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/account/*" element={<Auth />} />
-        <Route path="/restaurant/:city/:title/:id" element={<RestaurantDetails />} />
+        <Route path="/restaurant/:id" element={<RestaurantDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/my-profile/*" element={<Profile />} />
         <Route path="/payment/success/:id" element={<PaymentSuccess />} />
       </Routes>
     </div>
-  );
-};
+  )
+}
 
 export default CustomerRoute
