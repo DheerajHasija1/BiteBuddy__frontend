@@ -1,8 +1,10 @@
 import React from 'react'
-
+import FoodCategoryTable from './FoodCategoryTable'
 const FoodCategory =() =>{
     return(
-        <div>Dheeraj</div>
+        <div>
+            <FoodCategoryTable/>
+        </div>
     )
 }
 
