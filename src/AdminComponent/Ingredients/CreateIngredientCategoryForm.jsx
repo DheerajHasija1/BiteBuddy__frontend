@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {Grid,TextField,Button} from '@mui/material'
 
-const CreateFoodCategoryForm = () => {
+const CreateIngredientCategoryForm = () => {
     const [formData,setFormData] =useState({categoryName:"",restaurantId:""})
   const handleSubmit = () => {
 
@@ -46,4 +46,4 @@ const CreateFoodCategoryForm = () => {
   )
 }
 
-export default CreateFoodCategoryForm
+export default CreateIngredientCategoryForm;
