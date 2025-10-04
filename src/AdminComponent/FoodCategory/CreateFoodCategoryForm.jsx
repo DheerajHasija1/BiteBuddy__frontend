@@ -23,14 +23,14 @@ const CreateFoodCategoryForm = () => {
     <div className=''>
       <div className='p-5'>
         <h1 className='text-gray-400 text-center text-xl pb-10'>
-            Create Category
+            Create Food Category
         </h1>
         <form className="space-y-5" onSubmit={handleSubmit}>
             <Grid item xs={12} sx={{ mb: 2 }}>
                 <TextField fullWidth
                     id="categoryName"
                     name="categoryName"
-                    label="Category Name"
+                    label="Food Category"
                     variant="outlined"
                     onChange={handleInputChange}
                     value={FormData.categoryName}
