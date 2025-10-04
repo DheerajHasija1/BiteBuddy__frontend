@@ -32,7 +32,7 @@ const RestaurantCard = ({ item }) => {
      e.preventDefault();          
      e.stopPropagation();  
     if (!jwt) {
-      navigate('/login');
+      navigate('account/login');
       return;
     }
     setIsFavorite(!isFavorite);
