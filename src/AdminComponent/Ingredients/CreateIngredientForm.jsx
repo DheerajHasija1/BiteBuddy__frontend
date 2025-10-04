@@ -29,7 +29,7 @@ const CreateIngredientForm = () => {
     <div className=''>
       <div className='p-5'>
         <h1 className='text-gray-400 text-center text-xl pb-10'>
-            Create Category
+            Create Ingredients
         </h1>
         <form className="space-y-5" onSubmit={handleSubmit}>
             <Grid item xs={12} sx={{ mb: 2 }}>
