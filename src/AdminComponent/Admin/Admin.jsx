@@ -27,7 +27,7 @@ export const Admin = () => {
             <Route path='/menu' element={<Menu/>}/>
             <Route path='/category' element={<FoodCategory/>}/>
             <Route path='/ingredients' element={<Ingredients/>}/>
-            <Route path='/events' element={<Events/>}/>
+            {/* <Route path='/events' element={<Events/>}/> */}
             <Route path='/details' element={<RestaurantDetails/>}/>
             <Route path='/add-menu' element={<CreateMenuForm/>}/>
 
