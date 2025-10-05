@@ -1,15 +1,15 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Box, Card, CardHeader, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material'
 import CreateIcon from '@mui/icons-material/Create'
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import {getRestaurantsCategory} from "../../Component/State/Restaurant/Action"
 import Modal from '@mui/material/Modal';
 import CreateFoodCategoryForm from './CreateFoodCategoryForm';
+import { useDispatch, useSelector } from 'react-redux';
 
 const style = {
   position: 'absolute',
   top: '50%',
-  left: '50%',
+  left: '50%',  
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
@@ -19,9 +19,19 @@ const style = {
 };
 
 const  FoodCategoryTable =() => {
+    const {restaurant} = useSelector((store) => store);
+    const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const jwt= localStorage.getItem("jwt");
+
+        useEffect(() => {
+     
+         dispatch(getRestaurantsCategory({
+            jwt,
+            restaurantId:restaurant.usersRestaurant?.id}));
+        }, [])
     return (
     <Box>
         <Card sx={{mt: 0}}> 
@@ -47,10 +57,11 @@ const  FoodCategoryTable =() => {
             </TableHead>
             
             <TableBody>
+               { (restaurant.categories || []).map((category) => (
                 <TableRow  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell align="left" sx={{py: 1}}>{"id"}</TableCell>
-                    <TableCell align="left" sx={{py: 1}}>{"name"}</TableCell>
-                </TableRow>
+                    <TableCell align="left" sx={{py: 1}}>{category.id}</TableCell>
+                    <TableCell align="left" sx={{py: 1}}>{category.name}</TableCell>
+                </TableRow>))}
             </TableBody>
             </Table>
         </TableContainer>
@@ -63,7 +74,7 @@ const  FoodCategoryTable =() => {
             aria-describedby="modal-modal-description"
             >
             <Box sx={style}>
-                <CreateFoodCategoryForm/>
+                <CreateFoodCategoryForm onClose={handleClose}/>
             </Box>
         </Modal>
     </Box>

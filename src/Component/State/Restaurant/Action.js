@@ -81,23 +81,20 @@ export const getRestaurantById = (reqData) => {
 };
 
 
-
-
-export const getRestaurantByUserId =(jwt) =>{
-    return async(dispatch) =>{
-        dispatch({type:GET_RESTAURANT_BY_USER_ID_REQUEST});
-        try{
-            const {data} =await apiClient.get(`/restaurants/user`,{
-                headers: {
-                    Authorization: `Bearer ${jwt}`
-                },
-            });
-            console.log("restaurant by user id",data);
-            dispatch({type:GET_RESTAURANT_BY_USER_ID_SUCCESS,payload:data});
-        }catch(error){
-            console.log("error",error);
-            dispatch({type:GET_RESTAURANT_BY_USER_ID_FAILURE,payload:error});
-        }
+export const getRestaurantByUserId = (jwt) => async (dispatch) => {
+    dispatch({ type: GET_RESTAURANT_BY_USER_ID_REQUEST });
+    try {
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${jwt}`
+            }
+        };
+        const { data } = await apiClient.get('/admin/restaurant/user', config);
+        dispatch({ type: 'GET_RESTAURANT_BY_USER_ID_SUCCESS', payload: data });
+        console.log("Restaurant fetched:", data);
+    } catch (error) {
+        dispatch({ type: GET_RESTAURANT_BY_USER_ID_FAILURE, payload: error.message });
+        console.log("Error fetching restaurant:", error);
     }
 };
 

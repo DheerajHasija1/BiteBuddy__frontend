@@ -8,24 +8,64 @@ import { GET_USER_SUCCESS } from './ActionType';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-export const registerUser = (reqData) => async(dispatch) => {
-    dispatch({type: REGISTER_REQUEST});
-    try {
-        const {data} = await axios.post(`${API_BASE_URL}/auth/signup`, reqData.userData);
-        
-        console.log("Register API Request:", reqData.userData); 
-        
-        if(data.jwt) {
-            localStorage.setItem("jwt", data.jwt);
+export const registerUser = createAsyncThunk(
+    "auth/registerUser",
+    async (reqData, thunkAPI) => {
+        try {
+            const { data } = await apiClient.post("/auth/signup", reqData.userData);
+            
+            console.log("Register API Response:", data);
+            
+            if (data.jwt) {
+                localStorage.setItem("jwt", data.jwt);
+                
+                // Fetch user profile after registration
+                const config = {
+                    headers: {
+                        "Authorization": `Bearer ${data.jwt}`
+                    }
+                };
+                const userResponse = await apiClient.get("/users/profile", config);
+                
+                thunkAPI.dispatch({ type: GET_USER_SUCCESS, payload: userResponse.data });
+                
+                return data;
+            }
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response?.data || error.message);
         }
-        
-        dispatch({type: REGISTER_SUCCESS, payload: data.jwt});
-        console.log("Register Success", data);
-    } catch(error) {
-        dispatch({type: REGISTER_FAILURE, payload: error.message});
-        console.log("Error while calling register API", error.response?.data || error.message);
     }
-}
+);
+
+
+// export const loginUser = createAsyncThunk(
+//   "auth/loginUser",
+//   async (reqData, thunkAPI) => {
+//     try {
+//       const { data } = await apiClient.post("/auth/signin", reqData);
+
+//       if (data.jwt) {
+//         localStorage.setItem("jwt", data.jwt);
+
+//         // fetch user profile
+//         const config = {
+//                 headers: {
+//                     "Authorization": `Bearer ${data.jwt}`
+//                 }
+//             };
+//         const userResponse = await apiClient.get("/users/profile", config);
+
+//         thunkAPI.dispatch({ type: GET_USER_SUCCESS, payload: userResponse.data });
+
+//         return data; 
+//     }
+      
+//     }catch (error) {
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+
+// );
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",

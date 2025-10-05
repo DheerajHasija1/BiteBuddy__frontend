@@ -1,4 +1,4 @@
-import {api} from "../../Config/api";
+import { apiClient } from "../../Config/api";
 import {
     CREATE_INGREDIENT_CATEGORY_SUCCESS,
     CREATE_INGREDIENT_SUCCESS,
@@ -10,7 +10,7 @@ import {
 export const getIngredientsOfRestaurant = ({ id, jwt }) => {
   return async (dispatch) => {
     try {
-      const response = await api.get(
+      const response = await apiClient.get(
         `/admin/ingredients/restaurant/${id}`,
         {
           headers: {
@@ -32,7 +32,7 @@ export const getIngredientsOfRestaurant = ({ id, jwt }) => {
 export const createIngredient = ({ data, jwt }) => {
   return async (dispatch) => {
     try {
-      const response = await api.post("/admin/ingredients", data, {
+      const response = await apiClient.post("/admin/ingredients", data, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -52,7 +52,7 @@ export const createIngredientCategory = ({ data, jwt }) => {
   console.log("data ", data, "jwt", jwt);
   return async (dispatch) => {
     try {
-      const response = await api.post("/admin/ingredients/category", data, {
+      const response = await apiClient.post("/admin/ingredients/category", data, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
@@ -71,7 +71,7 @@ export const createIngredientCategory = ({ data, jwt }) => {
 export const getIngredientCategory = ({ id, jwt }) => {
   return async (dispatch) => {
     try {
-      const response = await api.get(
+      const response = await apiClient.get(
         `/admin/ingredients/restaurant/${id}/category`,
         {
           headers: {
@@ -93,7 +93,7 @@ export const getIngredientCategory = ({ id, jwt }) => {
 export const updateStockOfIngredient = ({ id, jwt }) => {
   return async (dispatch) => {
     try {
-      const { data } = await api.put(
+      const { data } = await apiClient.put(
         `/admin/ingredients/${id}/stock`,
         {},
         {

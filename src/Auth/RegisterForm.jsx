@@ -1,9 +1,9 @@
-import React, { useState }from 'react';
+import React, { useState,useEffect }from 'react';
 import { Field } from 'formik';
 import { TextField, Button, Typography , Alert } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch ,useSelector} from 'react-redux';
 import { registerUser } from '../Component/State/Authentication/Action';
 import * as Yup from 'yup';
 import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
@@ -25,12 +25,46 @@ const validationSchema = Yup.object().shape({
 const RegisterForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { auth } = useSelector((store) => store);
     const [errorMessage, setErrorMessage] = useState("");
+    const [justRegistered, setJustRegistered] = useState(false);
 
-    const handleSubmit = (values) => {
-        dispatch(registerUser({ userData: values, navigate }));
-        console.log("Register Credentials", values);
+    // const handleSubmit = (values) => {
+    //     dispatch(registerUser({ userData: values, navigate }));
+    //     console.log("Register Credentials", values);
+    // };
+
+    const handleSubmit = async (values) => {
+        try {
+            setErrorMessage("");
+            console.log("Register Credentials", values);
+            
+            const result = await dispatch(registerUser({ userData: values, navigate })).unwrap();
+            console.log("Registration result:", result); 
+            setJustRegistered(true);
+            
+        } catch (error) {
+            console.error("Registration failed:", error);
+            console.error("Full error object:", JSON.stringify(error)); 
+            setErrorMessage("Registration failed. Please check your details and try again.");
+            setJustRegistered(false);
+        }
     };
+
+    // Auto-navigate after successful registration
+        useEffect(() => {
+            if (justRegistered && auth.user && auth.jwt) {
+                console.log("User registered with role:", auth.user.role);
+                
+                if (auth.user.role === "ROLE_RESTAURANT_OWNER") {
+                    navigate("/admin/restaurant");
+                } else {
+                    navigate("/");
+                }
+                
+                setJustRegistered(false);
+            }
+        }, [auth.user, auth.jwt, justRegistered, navigate]);
 
     //  const handleSubmit = async (values) => {
     //     try {
@@ -79,6 +113,21 @@ const RegisterForm = () => {
                 </Alert>
             )} */}
 
+            {errorMessage && (
+                <Alert 
+                    severity="error" 
+                    sx={{ 
+                        mb: 2,
+                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                        color: '#f44336',
+                        border: '1px solid #f44336'
+                    }}
+                    onClose={() => setErrorMessage("")}
+                >
+                    {errorMessage}
+                </Alert>
+            )}
+
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -122,7 +171,7 @@ const RegisterForm = () => {
                             label="Role"
                         >
                             <MenuItem value={"ROLE_CUSTOMER"}>Customer</MenuItem>
-                            <MenuItem value={"ROLE_RESTAURANT"}>Restaurant</MenuItem>
+                            <MenuItem value={"ROLE_RESTAURANT_OWNER"}>Restaurant</MenuItem>
                             {/* <MenuItem value={"ROLE_ADMIN"}>Admin</MenuItem> */}
                         </Field>
                         </FormControl>

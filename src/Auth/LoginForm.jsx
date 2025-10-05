@@ -23,14 +23,36 @@ const LoginForm = () => {
     }
   }, [auth.jwt, navigate]);
 
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
+
+  // Navigation logic based on user role after login
+  useEffect(() => {
+    if (justLoggedIn && auth.user && auth.jwt) {
+
+      console.log("User logged in with role:", auth.user.role);
+      
+      if (auth.user.role === "ROLE_RESTAURANT_OWNER") {
+        navigate("/admin/restaurant");
+      } else {
+        navigate("/");
+      }
+      
+      setJustLoggedIn(false); // Reset flag
+    }
+  }, [auth.user, auth.jwt, justLoggedIn, navigate]);
+
+
   const handleSubmit = async (values) => {
     try {
       setErrorMessage(""); 
+      // debugger
       await dispatch(loginUser(values)).unwrap();
-      navigate("/"); 
+      setJustLoggedIn(true); // Trigger navigation after user profile loads
+
     } catch (error) {
       console.error("Login failed:", error);
       setErrorMessage("Invalid email or password. Please try again.");
+      setJustLoggedIn(false);
     }
   };
 

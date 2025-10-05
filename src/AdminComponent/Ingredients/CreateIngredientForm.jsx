@@ -5,18 +5,25 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useDispatch,useSelector } from 'react-redux';
+import {createIngredient} from "../../Component/State/Ingredients/Action"
 
 
 const CreateIngredientForm = () => {
     const [formData,setFormData] =useState({name:"",IngredientCategoryId:""})
-  const handleSubmit = () => {
-
+        const {restaurant,ingredients} = useSelector((store) => store);
+        const dispatch = useDispatch();
+        const jwt = localStorage.getItem("jwt");
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const data={
-        name :formData.categoryName,
-        restaurantId:{
-            id:1
-        },
+        // name :formData.categoryName,
+        // categoryId: ingredients,
+        ...formData,
+        restaurantId:restaurant.usersRestaurant?.id
     };
+
+    dispatch(createIngredient({data,jwt}));
     console.log("data",data);
   }
   const handleInputChange=(e)=>{
@@ -32,36 +39,33 @@ const CreateIngredientForm = () => {
             Create Ingredients
         </h1>
         <form className="space-y-5" onSubmit={handleSubmit}>
-            <Grid item xs={12} sx={{ mb: 2 }}>
+            <Grid item xs={12}>
                 <TextField fullWidth
-                    id="categoryName"
-                    name="categoryName"
+                    id="name"
+                    name="name"
                     label="Category Name"
                     variant="outlined"
                     onChange={handleInputChange}
-                    value={FormData.categoryName}
+                    value={formData.name}
                 ></TextField>
 
-                            <Grid item xs={12} sx={{ mb: 2 }}>
-                                <FormControl fullWidth>
+                            <Grid item xs={12}>
+                                <FormControl fullWidth sx={{mt:2}}>
                                     <InputLabel id="demo-simple-select-label">Category</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        name="IngredientCategoryId"
-                                        value={formData.IngredientCategoryId}
+                                        id="categoryId"
+                                        name="categoryId"
+                                        value={formData.categoryId}
                                         label="Category"
                                         onChange={handleInputChange}
                                     >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
+                                        {ingredients.category.map((item) => <MenuItem value={item.id}>{item.name}</MenuItem>)}
                                     </Select>
                                 </FormControl>
                             </Grid>
-
-                <Button variant="contaied" color='primary' type="submit">
-                    Create Category
+                <Button variant="contained" color='primary' type="submit" sx={{mt:2}}  fullWidth>
+                    Create Ingredient
                 </Button>
             </Grid>
         </form>

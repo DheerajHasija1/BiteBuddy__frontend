@@ -1,18 +1,31 @@
 import React,{useState} from 'react'
 import {Grid,TextField,Button} from '@mui/material'
+import { useDispatch, useSelector } from "react-redux"
+import { createCategoryAction } from '../../Component/State/Restaurant/Action'
 
-const CreateFoodCategoryForm = () => {
-    const [formData,setFormData] =useState({categoryName:"",restaurantId:""})
-  const handleSubmit = () => {
+const CreateFoodCategoryForm = ({ onClose }) => {
+    const [formData,setFormData] =useState({categoryName:""})
+    const dispatch =useDispatch();
 
-    const data={
-        name :formData.categoryName,
-        restaurantId:{
-            id:1
-        },
-    };
-    console.log("data",data);
-  }
+    const handleSubmit = (e) => {
+      e.preventDefault();
+        const data = {
+            name: formData.categoryName,
+        };
+        
+        dispatch(createCategoryAction({
+            data: data,
+            jwt: localStorage.getItem("jwt")
+        }));
+        
+        console.log("data", data);
+        // ✅ Reset form
+        setFormData({categoryName: ""});
+        
+        // ✅ Close modal
+        if (onClose) onClose();
+    }
+
   const handleInputChange=(e)=>{
     const {name,value} =e.target
     setFormData({
@@ -26,17 +39,17 @@ const CreateFoodCategoryForm = () => {
             Create Food Category
         </h1>
         <form className="space-y-5" onSubmit={handleSubmit}>
-            <Grid item xs={12} sx={{ mb: 2 }}>
+            <Grid item xs={12} >
                 <TextField fullWidth
                     id="categoryName"
                     name="categoryName"
                     label="Food Category"
                     variant="outlined"
                     onChange={handleInputChange}
-                    value={FormData.categoryName}
+                    value={formData.categoryName}
                 ></TextField>
 
-                <Button variant="contaied" color='primary' type="submit">
+                <Button variant="contained" color='primary' type="submit" fullWidth sx={{ mt: 2 }} >
                     Create Category
                 </Button>
             </Grid>
