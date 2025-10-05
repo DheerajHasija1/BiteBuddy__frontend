@@ -113,7 +113,7 @@ const CreateRestaurantForm = () => {
                             right:0,
                             outline:"none"
                         }}
-                        onClick={()=>handleRemoveImage()}>
+                        onClick={()=>handleRemoveImage(index)}>
                             <CloseIcon sx={{fontSize:"1rem"}}/>
                         </IconButton>
                         </div>
