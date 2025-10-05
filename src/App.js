@@ -9,6 +9,7 @@ import { Routes, Route, Router } from "react-router-dom";
 import RestaurantDetails from "./Component/Restaurant/RestaurantDetails";
 import { findCart } from './Component/State/Cart/Action';
 import Routers from './Routers/Routers';
+import { getRestaurantByUserId } from './Component/State/Restaurant/Action';
 
 
 function App() {
@@ -22,6 +23,10 @@ function App() {
       dispatch(findCart({jwt}));
     }
   }, [auth.jwt, dispatch, jwt]);
+
+  useEffect(() =>{
+  dispatch(getRestaurantByUserId(auth.jwt || jwt))
+  },[auth.user])
 
   return (
     <ThemeProvider theme={DarkTheme}>
