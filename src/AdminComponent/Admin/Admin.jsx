@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { AdminSideBar } from './AdminSideBar'
 import { Route,Routes } from 'react-router-dom'
 import Dashboard  from '../Dashboard/Dashboard'
@@ -9,11 +9,38 @@ import Ingredients from '../Ingredients/Ingredients'
 import Events from '../Events/Events'
 import RestaurantDetails from './RestaurantDetails'
 import CreateMenuForm from '../Menu/CreateMenuForm'
+import { useDispatch ,useSelector} from 'react-redux'
+import { getRestaurantById, getRestaurantsCategory } from '../../Component/State/Restaurant/Action'
+import {fetchRestaurantsOrder} from "../../Component/State/Restaurant Order/Action"
 
 export const Admin = () => {
+  const dispatch =useDispatch()
+  const jwt = localStorage.getItem("jwt")
+  const { restaurant } = useSelector(store => store)
     const handleClose =()=>{
-
     }
+
+    // useEffect(() =>{
+    //   dispatch(getRestaurantsCategory({
+    //     jwt,
+    //     restaurantId:restaurant.usersResturant?.id}));
+
+    //   dispatch(fetchRestaurantsOrder({
+    //     jwt,
+    //     restaurantId :restaurant.usersResturant?.id,
+    //   }))
+    // })
+    useEffect(() => {
+  if (restaurant.usersRestaurant?.id) {
+     dispatch(getRestaurantsCategory({
+        jwt,
+        restaurantId:restaurant.usersRestaurant?.id}));
+          dispatch(fetchRestaurantsOrder({
+        jwt,
+        restaurantId :restaurant.usersRestaurant?.id,
+      }))
+  }
+}, [restaurant.usersRestaurant?.id, dispatch, jwt])
   return (
     <div>
       <div className='lg:flex justify-between'>
