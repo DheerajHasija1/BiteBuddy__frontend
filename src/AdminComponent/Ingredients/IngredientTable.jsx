@@ -33,7 +33,7 @@ const  IngredientTable =() => {
         const handleUpdateStock=(id)=>{
           dispatch(updateStockOfIngredient({id,jwt}));
         }
-        //5.10.29
+        
     return (
     <Box>
         <Card sx={{mt: 0}}> 
