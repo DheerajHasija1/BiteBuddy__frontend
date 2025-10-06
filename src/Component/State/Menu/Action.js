@@ -32,6 +32,29 @@ export const createMenuItem = ({menu,jwt})  => {
     };
 };
 
+export const getAllMenuItemsByRestaurantId = ({jwt}) =>{
+  return async(dispatch) =>{
+    dispatch({ type: GET_MENU_ITEMS_BY_RESTAURANT_ID_REQUEST });
+    try{
+      const response =await apiClient.get(`/admin/food/restaurant`,{
+        headers:{
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+      console.log("getAllMenuItemsByRestaurantId",response);
+      dispatch({
+        type: GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS,
+        payload: response.data,
+      });
+    }catch (error) {
+      console.log("catch error ", error);
+      dispatch({
+        type: GET_MENU_ITEMS_BY_RESTAURANT_ID_FAILURE,
+        payload: error.message,
+      });
+    }
+  };
+};
 
 export const getMenuItemsByRestaurantId = (reqData) => {
   return async (dispatch) => {
@@ -78,7 +101,7 @@ export const updateMenuItemsAvailability = ({ foodId, jwt }) => {
     dispatch({ type: UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST });
     try {
       const { data } = await apiClient.put(
-        `admin/food/${foodId}`,
+        `admin/food/${foodId}/availability`,
         {},
         {
           headers: {
