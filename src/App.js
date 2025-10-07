@@ -24,17 +24,27 @@ function App() {
     }
   }, [auth.jwt, dispatch, jwt]);
 
-  useEffect(() =>{
-  dispatch(getRestaurantByUserId(auth.jwt || jwt))
-  },[auth.user])
+  // useEffect(() =>{
+  // dispatch(getRestaurantByUserId(auth.jwt || jwt))
+  // },[auth.user])
+
+  useEffect(() => {
+    // Fetch user profile
+    dispatch(getUser(jwt));
+  
+    if (auth.user?.role === "ROLE_RESTAURANT_OWNER") {
+        dispatch(getRestaurantByUserId(jwt))
+            .catch((error) => {
+                console.log("No restaurant found yet (new user):", error);
+            });
+    }
+    
+    dispatch(findCart(jwt));
+}, [auth.jwt]);
 
   return (
     <ThemeProvider theme={DarkTheme}>
       <CssBaseline />
-      {/* <Routes>
-        <Route path="/restaurant/:id" element={<RestaurantDetails />} />
-        <Route path="/*" element={<CustomerRoute />} />
-      </Routes> */}
       <Routers />
     </ThemeProvider>
   );
