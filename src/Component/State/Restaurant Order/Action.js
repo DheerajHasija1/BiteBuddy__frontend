@@ -10,7 +10,7 @@ import {
 } from "./ActionType";
 
 
-export const updateOrderStatus = async (orderId,orderStatus,jwt) => {
+export const updateOrderStatus =({orderId,orderStatus,jwt}) => {
     return async (dispatch) =>{
         try{
             dispatch({type : UPDATE_ORDER_STATUS_REQUEST});
@@ -44,7 +44,7 @@ export const fetchRestaurantsOrder =({restaurantId,orderStatus,jwt}) =>{
 
             const {data} = await apiClient.get(
                 `/orders/restaurant/${restaurantId}` ,{
-                    params :{order_status : orderStatus},
+                    params :{orderStatus : orderStatus},
                     headers :{
                         Authorization :`Bearer ${jwt}`,
                     },

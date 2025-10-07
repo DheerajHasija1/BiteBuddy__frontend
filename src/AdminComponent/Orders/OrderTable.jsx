@@ -3,12 +3,14 @@ import { Box, Card, CardHeader, Table, TableBody, TableCell, TableContainer, Tab
 import { useDispatch, useSelector } from 'react-redux';
 import{fetchRestaurantsOrder} from "../../Component/State/Restaurant Order/Action"
 import { Chip } from '@mui/material';
-//5.58.01
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import {updateOrderStatus} from "../../Component/State/Restaurant Order/Action"
 
 const  OrderTable =() => {
     const dispatch = useDispatch();
     const jwt = localStorage.getItem("jwt");
-    const {restaurantOrder,restaurant} =useSelector((store) => store);
+    const {restaurantOrders,restaurant} =useSelector((store) => store);
 
    useEffect(() =>{
     dispatch(fetchRestaurantsOrder({
@@ -17,6 +19,10 @@ const  OrderTable =() => {
     }))
    },[])
 
+   const handleUpdateOrderStatus  =(orderId,orderStatus) =>{
+    dispatch(updateOrderStatus({jwt,orderId,orderStatus}))
+   }
+
     return (
     <Box>
         <Card sx={{mt: 0}}> 
@@ -24,7 +30,7 @@ const  OrderTable =() => {
             title={"All Orders"} 
             sx={{pt: 1, pb: 1, alignItems:"center"}} 
         />
-        
+
         <TableContainer component={Paper} sx={{boxShadow: 0}}> 
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -35,38 +41,39 @@ const  OrderTable =() => {
                 <TableCell align="left" sx={{py: 1}}>Price</TableCell>
                 <TableCell align="left" sx={{py: 1}}>Name</TableCell>
                 <TableCell align="left" sx={{py: 1}}>Ingredients</TableCell>
-                <TableCell align="right" sx={{py: 1}}>Status</TableCell>
+                <TableCell align="left" sx={{py: 1}}>Status</TableCell>
+                <TableCell align="right" sx={{py: 1}}>Update Status</TableCell>
                 </TableRow>
             </TableHead>
             
             <TableBody>
-                {restaurantOrder?.orders && restaurantOrder.orders.length > 0 ? (
-                restaurantOrder.orders.map((order) => (
+                {restaurantOrders?.orders && restaurantOrders.orders.length > 0 ? (
+                restaurantOrders?.orders?.map((order) => (
                 <TableRow key={order.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell align="left" sx={{py: 1}}>#{order.id}</TableCell> 
                     <TableCell align="left" sx={{ py: 1 }}>
-                                        {order.items && order.items[0]?.food?.images[0] && (
+                                        {order.orderItems?.[0]?.food?.images?.[0] && (
                                             <img
-                                                src={order.items[0].food.images[0]}
+                                                src={order.orderItems[0].food.images[0]}
                                                 alt="food"
                                                 style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }}
                                             />
                                         )}
                     </TableCell>
-                    <TableCell align="left" sx={{py: 1}}>{order.customer?.fullname}</TableCell>
-                    <TableCell align="left" sx={{py: 1}}>{order.totalAmount}</TableCell>
+                    <TableCell align="left" sx={{py: 1}}>{order.customer?.name}</TableCell>
+                    <TableCell align="left" sx={{py: 1}}>{order.totalAmount}</TableCell>    
                     <TableCell align="left" sx={{py: 1}}>
-                      {order.items.map((orderItem) => (
-                                            <div>
-                                                {orderItem.food?.name || 'N/A'}
-                                            </div>
-                                        ))}
+                      {order.orderItems?.map((orderItem, index) => (
+                                        <div key={orderItem.id || index}>
+                                            {orderItem.food?.name || 'N/A'}
+                                        </div>
+                                    ))} 
                     </TableCell>
                     <TableCell align="left" sx={{py: 1}}>
-                       {order.items.map((item) => (
-                                            item.ingredients?.map((ingredient) => (
+                       {order.orderItems?.map((item,itemIndex) => (
+                                            item.ingredients?.map((ingredient,ingIndex) => (
                                                 <Chip
-                                                    key={ingredient.id}
+                                                    key={ingredient.id || `${itemIndex}-${ingIndex}`}
                                                     label={ingredient.name || ingredient}
                                                     size="small"
                                                     sx={{ mr: 0.5, mb: 0.5 }}
@@ -74,7 +81,7 @@ const  OrderTable =() => {
                                          ))
                         ))}
                     </TableCell>
-                    <TableCell align="right" sx={{py: 1}}>
+                    <TableCell align="left" sx={{py: 1}}>
                                         <Chip
                                             label={order.orderStatus || 'PENDING'}
                                             color={
@@ -85,6 +92,21 @@ const  OrderTable =() => {
                                             size="small"
                                         />
                     </TableCell>
+                    <TableCell align="right" sx={{py: 1}}>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id={`order-status-${order.id}`}
+                                value={order.orderStatus}
+                                label="Status"
+                                onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
+                                size="small"
+                            >
+                                {["PENDING", "COMPLETED", "OUT_FOR_DELIVERY","DELIVERED"].map((status) => (
+                                    <MenuItem key={status} value={status}>{status}</MenuItem>
+                                ))}
+                            </Select>
+                    </TableCell>
+
                 </TableRow>))
                 ) :(
                 <TableRow>
