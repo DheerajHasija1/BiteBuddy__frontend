@@ -1,126 +1,91 @@
-import React, { useState,useEffect }from 'react';
-import { Field } from 'formik';
-import { TextField, Button, Typography , Alert } from '@mui/material';
-import { Formik, Form } from 'formik';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch ,useSelector} from 'react-redux';
-import { registerUser } from '../Component/State/Authentication/Action';
-import * as Yup from 'yup';
-import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+import { Field } from 'formik'
+import { TextField, Button, Typography, Alert } from '@mui/material'
+import { Formik, Form } from 'formik'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from '../Component/State/Authentication/Action'
+import * as Yup from 'yup'
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material'
 
 const initialValues = {
-    name: "",    // Changed from fullName to name
+    name: "",  // Changed from fullName to name
     email: "",
     password: "",
     role: ""
-};
+}
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),  
+    name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
     role: Yup.string().required("Role is required")
-});
+})
 
 const RegisterForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { auth } = useSelector((store) => store);
+    const { auth } = useSelector(store => store);
     const [errorMessage, setErrorMessage] = useState("");
-    const [justRegistered, setJustRegistered] = useState(false);
 
-    // const handleSubmit = (values) => {
-    //     dispatch(registerUser({ userData: values, navigate }));
-    //     console.log("Register Credentials", values);
-    // };
+    console.log("🔵 RegisterForm rendered, auth state:", {
+        jwt: auth.jwt,
+        user: auth.user,
+        loading: auth.loading
+    });
+
+    // First useEffect - Already logged in check
+    useEffect(() => {
+        if (auth.jwt && auth.user) {
+            
+            if (auth.user.role === "ROLE_RESTAURANT_OWNER") {
+                navigate("/admin/restaurant");
+            } else {
+                navigate("/");
+            }
+        }
+    }, [auth.jwt, auth.user, navigate]);
+
+    // Second useEffect - After registration navigation
+    useEffect(() => {
+        
+        if (auth.user && auth.jwt) {
+            if (auth.user.role === "ROLE_RESTAURANT_OWNER") {
+                navigate("/admin/restaurant");
+            } else {
+                navigate("/");
+            }
+        } else {
+            console.log("Waiting for user profile... JWT:", auth.jwt);
+        }
+    }, [auth.user]);
 
     const handleSubmit = async (values) => {
         try {
             setErrorMessage("");
-            console.log("Register Credentials", values);
-            
-            const result = await dispatch(registerUser({ userData: values, navigate })).unwrap();
-            console.log("Registration result:", result); 
-            setJustRegistered(true);
-            
+
+            const result = await dispatch(registerUser({ userData: values })).unwrap();
         } catch (error) {
-            console.error("Registration failed:", error);
-            console.error("Full error object:", JSON.stringify(error)); 
-            setErrorMessage("Registration failed. Please check your details and try again.");
-            setJustRegistered(false);
+            console.error(" Registration failed!");
+            console.error(" Error:", error);
+            setErrorMessage(error.message || "Registration failed. Please try again.");
         }
     };
 
-    // Auto-navigate after successful registration
-        useEffect(() => {
-            if (justRegistered && auth.user && auth.jwt) {
-                console.log("User registered with role:", auth.user.role);
-                
-                if (auth.user.role === "ROLE_RESTAURANT_OWNER") {
-                    navigate("/admin/restaurant");
-                } else {
-                    navigate("/");
-                }
-                
-                setJustRegistered(false);
-            }
-        }, [auth.user, auth.jwt, justRegistered, navigate]);
-
-    //  const handleSubmit = async (values) => {
-    //     try {
-    //         setErrorMessage(""); // पहले error clear करें
-    //         console.log("Register Credentials", values);
-            
-    //         await dispatch(registerUser({ userData: values, navigate })).unwrap();
-            
-    //     } catch (error) {
-    //         console.error("Registration failed:", error);
-    //         setErrorMessage("Registration failed");
-            
-    //         // Different backend errors के लिए different messages
-    //         // if (error.includes("already exists") || error.includes("Email already exists")) {
-    //         //     setErrorMessage("This email is already registered! Please use a different email or login instead.");
-    //         // } else if (error.includes("Internal Server Error")) {
-    //         //     setErrorMessage("Registration failed due to server error. Please try again later.");
-    //         // } else if (error.includes("validation")) {
-    //         //     setErrorMessage("Please check your input details and try again.");
-    //         // } else {
-    //         //     setErrorMessage("Registration failed. Please check your details and try again.");
-    //         // }
-    //     }
-    // };
-
-  return (
-    <div>
-        <Typography variant="h5" className="text-center mb-4">
-        Register
-        </Typography>
-
-        
-            {/* Error Message Display */}
-            {/* {errorMessage && (
-                <Alert 
-                    severity="error" 
-                    sx={{ 
-                        mb: 2,
-                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                        color: '#f44336',
-                        border: '1px solid #f44336'
-                    }}
-                    onClose={() => setErrorMessage("")}
-                >
-                    {errorMessage}
-                </Alert>
-            )} */}
+    return (
+        <div className="text-white p-4">
+            <Typography variant="h4" className="text-center mb-8 text-white font-bold">
+                Register
+            </Typography>
 
             {errorMessage && (
                 <Alert 
                     severity="error" 
                     sx={{ 
-                        mb: 2,
+                        mb: 3,
                         backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                        color: '#f44336',
-                        border: '1px solid #f44336'
+                        color: 'white',
+                        '& .MuiAlert-icon': { color: '#f44336' }
                     }}
                     onClose={() => setErrorMessage("")}
                 >
@@ -128,67 +93,125 @@ const RegisterForm = () => {
                 </Alert>
             )}
 
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-        >
-            {({ errors, touched }) => (
-                <Form>
-                    <Field
-                        as={TextField}
-                        name="name"    // Changed from fullName to name
-                        label="Full Name"
-                        fullWidth
-                        error={errors.name && touched.name}  // Changed from fullName to name
-                        helperText={errors.name && touched.name ? errors.name : ""}  // Changed from fullName to name
-                        variant="outlined"/>
-
-                    <Field
-                        as={TextField}
-                        name="email"
-                        label="Email"
-                        fullWidth
-                        variant="outlined"
-                        margin="normal"/>
-
-                    <Field
-                        as={TextField}
-                        name="password"
-                        label="Password"
-                        type="password"
-                        fullWidth
-                        variant="outlined"
-                        style={{ marginTop: '5px', marginBottom: '10px' }}/>
-
-                        <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
+            <Formik 
+                onSubmit={handleSubmit} 
+                validationSchema={validationSchema}
+                initialValues={initialValues}
+            >
+                {({ errors, touched }) => (
+                    <Form className="space-y-6">
                         <Field
-                            as={Select}
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            name="role"
-                            label="Role"
-                        >
-                            <MenuItem value={"ROLE_CUSTOMER"}>Customer</MenuItem>
-                            <MenuItem value={"ROLE_RESTAURANT_OWNER"}>Restaurant</MenuItem>
-                            {/* <MenuItem value={"ROLE_ADMIN"}>Admin</MenuItem> */}
-                        </Field>
+                            as={TextField}
+                            name="name"
+                            label="Full Name"
+                            fullWidth
+                            variant="outlined"
+                            error={touched.name && Boolean(errors.name)}
+                            helperText={touched.name && errors.name}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
+                                    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                                },
+                                '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.7)' },
+                                '& .MuiOutlinedInput-input': { color: 'white' }
+                            }}
+                        />
+
+                        <Field
+                            as={TextField}
+                            name="email"
+                            label="Email"
+                            fullWidth
+                            variant="outlined"
+                            error={touched.email && Boolean(errors.email)}
+                            helperText={touched.email && errors.email}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
+                                    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                                },
+                                '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.7)' },
+                                '& .MuiOutlinedInput-input': { color: 'white' }
+                            }}
+                        />
+
+                        <Field
+                            as={TextField}
+                            name="password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            variant="outlined"
+                            error={touched.password && Boolean(errors.password)}
+                            helperText={touched.password && errors.password}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
+                                    '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                                },
+                                '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.7)' },
+                                '& .MuiOutlinedInput-input': { color: 'white' }
+                            }}
+                        />
+
+                        <FormControl fullWidth error={touched.role && Boolean(errors.role)}>
+                            <InputLabel sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Role</InputLabel>
+                            <Field
+                                as={Select}
+                                name="role"
+                                label="Role"
+                                sx={{
+                                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.23)' },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+                                    '& .MuiSvgIcon-root': { color: 'white' },
+                                    color: 'white'
+                                }}
+                            >
+                                <MenuItem value="ROLE_CUSTOMER">Customer</MenuItem>
+                                <MenuItem value="ROLE_RESTAURANT_OWNER">Restaurant Owner</MenuItem>
+                            </Field>
+                            {touched.role && errors.role && (
+                                <Typography color="error" variant="caption">{errors.role}</Typography>
+                            )}
                         </FormControl>
 
-                        <Button  sx={{ mt: 2, Padding:'1rem' }} fullWidth variant="contained" color="primary" type="submit">Register</Button>
-                </Form>
-            )}
-        </Formik>
-        <Typography variant='body2' align='center' sx={{ mt: 3 }}>
-            Already have an account? 
-            <Button size="small" onClick={() => navigate("/account/login")}>
-                Login
-            </Button>
-        </Typography>
+                        <Button 
+                            sx={{ 
+                                mt: 2, 
+                                py: 1.5,
+                                fontSize: '1rem',
+                                textTransform: 'none',
+                                backgroundColor: '#e91e63',
+                                '&:hover': { backgroundColor: '#d81b60' }
+                            }} 
+                            fullWidth 
+                            variant="contained" 
+                            type="submit"
+                        >
+                            REGISTER
+                        </Button>
+                    </Form>
+                )}
+            </Formik>
 
+            <div className="mt-6 text-center text-white">
+                <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                    Already have an account?{' '}
+                    <Button
+                        sx={{ 
+                            color: '#e91e63',
+                            textTransform: 'none',
+                            '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' }
+                        }}
+                        onClick={() => navigate("/account/login")}
+                    >
+                        LOGIN
+                    </Button>
+                </Typography>
+            </div>
+        </div>
+    )
+}
 
-    </div>
-  )
-} 
 export default RegisterForm;

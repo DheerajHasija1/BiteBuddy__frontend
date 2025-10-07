@@ -8,33 +8,38 @@
     import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-    export const registerUser = createAsyncThunk(
-        "auth/registerUser",
-        async (reqData, thunkAPI) => {
-            try {
-                const { data } = await apiClient.post("/auth/signup", reqData.userData);
-                debugger
-                console.log("Register API Response:", data);
+ export const registerUser = createAsyncThunk(
+    "auth/registerUser",
+    async (reqData, thunkAPI) => {
+        try {
+            const { data } = await apiClient.post("/auth/signup", reqData.userData);
+            
+            console.log("Register API Response:", data);
+            
+            if (data.jwt) {
                 localStorage.setItem("jwt", data.jwt);
                 
-                if (data.jwt) {
-                    // Fetch user profile after registration
-                    const config = {
-                        headers: {
-                            "Authorization": `Bearer ${data.jwt}`
-                        }
-                    };
-                    const userResponse = await apiClient.get("/users/profile", config);
-                    
-                    thunkAPI.dispatch({ type: GET_USER_SUCCESS, payload: userResponse.data });
-                    
-                    return data;
-                }
-            } catch (error) {
-                return thunkAPI.rejectWithValue(error.response?.data || error.message);
+                // ✅ Dispatch REGISTER_SUCCESS with full data object
+                thunkAPI.dispatch({ type: REGISTER_SUCCESS, payload: data });
+
+                // Fetch user profile after registration
+                const config = {
+                    headers: {
+                        "Authorization": `Bearer ${data.jwt}`
+                    }
+                };
+                const userResponse = await apiClient.get("/users/profile", config);
+                
+                thunkAPI.dispatch({ type: GET_USER_SUCCESS, payload: userResponse.data });
+                
+                return data;
             }
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response?.data || error.message);
         }
-    );
+    }
+);
+
 
 
     export const loginUser = createAsyncThunk(
