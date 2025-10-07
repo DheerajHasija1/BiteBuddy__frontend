@@ -1,6 +1,5 @@
 import React,{useState} from 'react'
 import {Grid,TextField,Button} from '@mui/material'
-import IngredientTable from './IngredientTable'
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
