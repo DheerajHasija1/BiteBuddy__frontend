@@ -15,7 +15,7 @@ const initialState = {
 export const authReducer = (state=initialState, action) => {
     switch(action.type){
         case REGISTER_REQUEST:
-        case LOGIN_SUCCESS:
+        case LOGIN_REQUEST:
         case GET_USER_REQUEST:
         case ADD_TO_FAVORITES_REQUEST:
             return{...state,isLoading:true, error:null, success:null};
@@ -24,7 +24,7 @@ export const authReducer = (state=initialState, action) => {
         case LOGIN_SUCCESS:
             return{...state,
                 isLoading:false,
-                jwt:action.payload, 
+                jwt: action.payload.jwt,
                 success:"Authentication Successful"};
         case GET_USER_SUCCESS:
             return{
@@ -41,7 +41,7 @@ export const authReducer = (state=initialState, action) => {
                 error:null,
                 success:"Added to Favorites"};
         case LOGOUT:
-            return{ initialState};
+            return initialState;
 
         case REGISTER_FAILURE:
         case LOGIN_FAILURE:
