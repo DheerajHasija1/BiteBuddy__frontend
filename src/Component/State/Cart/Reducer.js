@@ -29,11 +29,34 @@ const cartReducer = (state = initialState, action) => {
         cartItems: action.payload.items,
       };
     case actionTypes.ADD_ITEM_TO_CART_SUCCESS:
-              return {
-        ...state,
-        loading: false,
-        cartItems: [action.payload, ...state.cartItems],
-      };
+      //  Check if item already exists
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      if (existingItemIndex >= 0) {
+        // Item already exists - update quantity
+        return {
+          ...state,
+          loading: false,
+          cartItems: state.cartItems.map((item, index) =>
+            index === existingItemIndex ? action.payload : item
+          ),
+        };
+      } else {
+        // New item - add to cart
+        return {
+          ...state,
+          loading: false,
+          cartItems: [...state.cartItems, action.payload],
+        };
+      }
+
+      //         return {
+      //   ...state,
+      //   loading: false,
+      //   cartItems: [action.payload, ...state.cartItems],
+      // };
     case actionTypes.UPDATE_CARTITEM_SUCCESS:
       return {
         ...state,

@@ -22,8 +22,8 @@ const EventCard = () => {
                     <Typography variant="body2" color="textSecondary">50% off on your first order</Typography>
                     <div className='py-2 space-y-2'>
                         <p className="text-gray-600">{"Rajpura"}</p>
-                        <p className='text-sm text-blue-500'>September 15,2025 12:00 PM</p>
-                        <p className='text-sm text-red-500'>September 20,2025 12:00 PM</p>
+                        <p className='text-sm text-blue-500'>October 10,2025 12:00 PM</p>
+                        <p className='text-sm text-red-500'>October 20,2025 12:00 PM</p>
                     </div>
                 </CardContent>
                 {false && <CardActions>

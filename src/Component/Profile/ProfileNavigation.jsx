@@ -6,7 +6,6 @@ import { logoutUser } from "../State/Authentication/Action";
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HomeIcon from '@mui/icons-material/Home';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -15,7 +14,7 @@ const menu = [
     {title:"Orders", icon:<ShoppingBagIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Favorites", icon:<FavoriteIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Address", icon:<HomeIcon sx={{ fontSize: "1.7rem" }} />},
-    {title:"Payment", icon:<AccountBalanceIcon sx={{ fontSize: "1.7rem" }} />},
+    // {title:"Payment", icon:<AccountBalanceIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Events", icon:<EmojiEventsIcon sx={{ fontSize: "1.7rem" }} />},
     {title:"Logout", icon:<LogoutIcon sx={{ fontSize: "1.7rem" }} />},
     // {title:"Notifications", icon:<NotificationsActiveIcon sx={{ fontSize: "1.7rem" }} />}
@@ -27,7 +26,7 @@ const ProfileNavigation = ({open, handleClose}) => {
     const dispatch = useDispatch();
 
     const handleNavigation = (item) => {
-        if(item.title === "Logout"){
+        if(item.title === "Logout"){    
             if (handleClose) handleClose();
             dispatch(logoutUser());
             navigate("/");

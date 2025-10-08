@@ -32,6 +32,11 @@ const Navbar = () => {
     navigate("/my-profile");
   }
 
+ useEffect(() => {
+    console.log("cartItems array:", cart.cartItems?.length || 0);
+    console.log("cart.items array:", cart.cart?.items?.length || 0);
+  }, [cart.cartItems, cart.cart?.items]);
+
   return (
     <div className='px-5 z-50 py-[.5rem] bg-[#e91e63] lg:px-20 flex justify-between items-center'>
       <div className='lg:mr-10 cursor-pointer flex items-center space-x-4'>
@@ -41,11 +46,14 @@ const Navbar = () => {
         <IconButton className="text-white">
           <SearchIcon sx={{fontSize:"1.5rem", color: "white"}} />
         </IconButton>
+
         <IconButton onClick={() => navigate("/cart")}>
-          <Badge color="primary" badgeContent={cart.cart?.items.length || 0}>
+          {/* <Badge color="primary" badgeContent={cart.cart?.items.length || 0}> */}
+          <Badge color="primary" badgeContent={cart.cartItems?.length  || 0}>
             <ShoppingCartIcon sx={{fontSize: "1.5rem", color: "white"}}/>
           </Badge>
         </IconButton>
+
         <IconButton onClick={handleAvatarClick}>
           {auth.user ? (
             <Avatar sx={{bgcolor:"white", color:pink.A400}}>

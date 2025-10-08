@@ -10,9 +10,17 @@ export const AddressCard = ({address, showButton, handleSelectAddress}) => {
                 <h1 className='font-semibold text-lg text-white'>
                     {address?.addressType || 'Home'}
                 </h1>
-                <p>
-                    {address?.streetAddress}, {address?.city}, {address?.state}, {address?.pincode}
-                </p>
+                <div className="space-y-2">
+                                    <p className="text-gray-300 text-sm leading-relaxed">
+                                        {address.street}
+                                    </p>
+                                    <p className="text-gray-300 text-sm">
+                                        {address.city}, {address.state}
+                                    </p>
+                                    <p className="text-gray-300 text-sm">
+                                        {address.pincode} - India 
+                                    </p>
+                                </div>
                 {showButton && (
                     <Button variant="outlined" fullWidth 
                         onClick={() => handleSelectAddress(address)}>

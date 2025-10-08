@@ -165,7 +165,7 @@ const Address = () => {
                                         {address.city}, {address.state}
                                     </p>
                                     <p className="text-gray-300 text-sm">
-                                        {address.country} - {address.pincode}
+                                        {address.pincode} - India 
                                     </p>
                                 </div>
                             </div>
