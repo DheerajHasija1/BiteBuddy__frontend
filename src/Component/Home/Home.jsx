@@ -23,9 +23,9 @@ const Home = () => {
 
     return (
         <div className=''>
-            <section className='banner -z-50 relative flex flex-col justify-center
-            items-center'>
-                <div className='w-[50vw] z-10 text-center'>
+            {/* <section className='banner -z-50 relative flex flex-col justify-center
+            items-center'> */}
+                {/* <div className='w-[50vw] z-10 text-center'>
                     <p className='text-2xl lg:text-6xl font-bold z-10 py-5'>BiteBuddy</p>
                     <p className='z-10 text-gray-300 text-xl lg:text-4xl'>Taste the Convenience: Food, Fast and Delivered. </p>
                 </div>
@@ -34,8 +34,9 @@ const Home = () => {
                 </div>
                 <div className='fadout'>
 
-                </div>
-            </section>
+                </div> */}
+            {/* </section> */}
+            <section className='banner'></section>
             <section className='p-10 lg:py-10 lg:px-20'>
                 <p className='text-2xl font-semibold text-gray-400 py-3 pb-10'>Top
                     Meals</p>
