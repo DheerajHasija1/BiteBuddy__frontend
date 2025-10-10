@@ -4,6 +4,7 @@ import * as actionTypes from "./ActionTypes";
 const initialState = {
     restaurant: null,
     loading: false,
+    usersRestaurant: null,
     error: null,
     menuCategories: []
 };
@@ -17,6 +18,8 @@ const restaurantReducer = (state = initialState, action) => {
         case actionTypes.GET_RESTAURANT_BY_ID_REQUEST:
         case actionTypes.CREATE_CATEGORY_REQUEST:
         case actionTypes.GET_RESTAURANTS_CATEGORY_REQUEST:
+        case actionTypes.GET_RESTAURANT_BY_USER_ID_REQUEST:
+
             return {
                 ...state,
                 loading: true,
@@ -122,6 +125,7 @@ const restaurantReducer = (state = initialState, action) => {
         case actionTypes.CREATE_EVENTS_FAILURE:
         case actionTypes.GET_ALL_EVENTS_FAILURE:
         case actionTypes.DELETE_EVENTS_FAILURE:
+        case actionTypes.GET_RESTAURANT_BY_USER_ID_FAILURE:
             return {
                 ...state,
                 loading: false,
@@ -131,7 +135,7 @@ const restaurantReducer = (state = initialState, action) => {
             return { ...state, loading: true };
         case "GET_RESTAURANT_CATEGORIES_SUCCESS":
             return { 
-                ...state, 
+                ...state,   
                 loading: false, 
                 menuCategories: action.payload 
             };
@@ -141,6 +145,7 @@ const restaurantReducer = (state = initialState, action) => {
                 loading: false, 
                 error: action.payload 
             };
+        
         default:
             return state;
     }

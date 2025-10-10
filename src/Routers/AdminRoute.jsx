@@ -1,35 +1,50 @@
-import React ,{useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import CreateRestaurantForm from '../AdminComponent/CreateRestaurantForm/CreateRestaurantForm'
-import {Admin} from '../AdminComponent/Admin/Admin'
-import { Route,Routes } from 'react-router-dom'
+import { Admin } from '../AdminComponent/Admin/Admin'
+import { Route, Routes } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getRestaurantByUserId } from '../Component/State/Restaurant/Action'
+import { CircularProgress, Box } from '@mui/material'
 
 export const AdminRoute = () => {
   const { restaurant, auth } = useSelector(store => store);
   const dispatch = useDispatch();
+  // const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    // Fetch restaurant data when component loads
-    if (auth.jwt && !restaurant.usersRestaurant) {
-      dispatch(getRestaurantByUserId(auth.jwt));
+    const jwt = localStorage.getItem("jwt");
+    
+    if (jwt) {
+      dispatch(getRestaurantByUserId(jwt));
+      // setIsInitialLoad(false);
     }
-  }, [auth.jwt, dispatch]);
+  }, []);
+
+  // if (isInitialLoad && restaurant.loading) {
+  //   return (
+  //     <Box 
+  //       sx={{ 
+  //         display: 'flex', 
+  //         justifyContent: 'center', 
+  //         alignItems: 'center', 
+  //         minHeight: '100vh' 
+  //       }}
+  //     >
+  //       <CircularProgress />
+  //     </Box>
+  //   );
+  // }
+
+  // ✅ Data aane ke baad check karo restaurant exists ya nahi
+  const hasRestaurant = restaurant.usersRestaurant !== null && 
+                        restaurant.usersRestaurant !== undefined;
 
   return (
-    <div>
-      {/* {false ? <CreateRestaurantForm/> : <Admin/>} */}
-      <Routes>
-        <Route
-         path="/*" 
-         element={
-          // !restaurant.usersRestaurant?<CreateRestaurantForm/> : <Admin/>
-          !restaurant.usersRestaurant ? <CreateRestaurantForm/> : <Admin/>
-          // <Admin/>
-          }>
-        </Route>
-      </Routes>
-    </div>
+    <Routes>
+      <Route 
+        path="/*" 
+        element={hasRestaurant ? <Admin /> : <CreateRestaurantForm />}
+      />
+    </Routes>
   )
 }
-export default AdminRoute;
