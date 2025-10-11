@@ -6,55 +6,48 @@ import CarouselItem from "./Carouselitems";
 import { topMeals } from "./topMeal";
 
 const MultiItemCarousel = () => {
-    const settings = {
+const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 1,  // Mobile 
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     arrows: false,
     responsive: [
         {
-            breakpoint: 1536, // 2xl screens
+            breakpoint: 10000,  // Desktop 
             settings: {
                 slidesToShow: 5,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 1280, // xl screens
+            breakpoint: 1280,  // Large laptop
             settings: {
                 slidesToShow: 4,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 1024, // lg screens (tablets landscape)
+            breakpoint: 1024,  // Tablet landscape
             settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 768, // md screens (tablets)
+            breakpoint: 768,  // Tablet
             settings: {
                 slidesToShow: 2,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 640, // sm screens (large phones)
+            breakpoint: 640,  // Large mobile
             settings: {
                 slidesToShow: 2,
-                slidesToScroll: 1,
-            }
-        },
-        {
-            breakpoint: 480, // xs screens (small phones)
-            settings: {
-                slidesToShow: 1,
                 slidesToScroll: 1,
             }
         }
