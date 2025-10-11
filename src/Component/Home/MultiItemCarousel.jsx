@@ -10,44 +10,37 @@ const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,  // Mobile 
+    slidesToShow: 5,  // Default for desktop
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     arrows: false,
     responsive: [
         {
-            breakpoint: 10000,  // Desktop 
-            settings: {
-                slidesToShow: 5,
-                slidesToScroll: 1,
-            }
-        },
-        {
-            breakpoint: 1280,  // Large laptop
+            breakpoint: 1280,  // Below 1280px
             settings: {
                 slidesToShow: 4,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 1024,  // Tablet landscape
+            breakpoint: 1024,  // Below 1024px (tablets)
             settings: {
                 slidesToShow: 3,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 768,  // Tablet
+            breakpoint: 768,  // Below 768px
             settings: {
                 slidesToShow: 2,
                 slidesToScroll: 1,
             }
         },
         {
-            breakpoint: 640,  // Large mobile
+            breakpoint: 480,  // Below 480px (mobile)
             settings: {
-                slidesToShow: 2,
+                slidesToShow: 1,
                 slidesToScroll: 1,
             }
         }
