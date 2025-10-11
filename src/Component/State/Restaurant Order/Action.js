@@ -37,14 +37,18 @@ export const updateOrderStatus =({orderId,orderStatus,jwt}) => {
     };
 };
 
-export const fetchRestaurantsOrder =({restaurantId,orderStatus,jwt}) =>{
+export const fetchRestaurantsOrder =({ restaurantId, orderStatus, jwt, page = 0, size = 10 }) =>{
     return async (dispatch) =>{
         try{
             dispatch({type : GET_RESTAURANTS_ORDER_REQUEST});
 
             const {data} = await apiClient.get(
                 `/orders/restaurant/${restaurantId}` ,{
-                    params :{orderStatus : orderStatus},
+                    params: { 
+                        orderStatus: orderStatus,
+                        page: page,
+                        size: size
+                    },
                     headers :{
                         Authorization :`Bearer ${jwt}`,
                     },

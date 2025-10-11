@@ -12,21 +12,25 @@ const orderStatus = [
 
 export const Orders = () => {
   const [filterValue, setFilterValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
   const { restaurant } = useSelector((store) => store);
 
   const handleFilter = (e, value) => {
     setFilterValue(value);
+     setCurrentPage(0); 
   }
 
   useEffect(() => {
     dispatch(fetchRestaurantsOrder({
       jwt,
       restaurantId: restaurant.usersRestaurant?.id,
-      orderStatus: filterValue || null
+      orderStatus: filterValue || null,
+      page: currentPage, 
+      size: 10
     }))
-  }, [filterValue])
+  }, [filterValue, currentPage])
 
   return (
     <div className='px-2' style={{ marginLeft: '-20px' }}>
@@ -46,7 +50,7 @@ export const Orders = () => {
           </RadioGroup>
         </FormControl>
       </Card>
-      <OrderTable />
+      <OrderTable currentPage={currentPage} setCurrentPage={setCurrentPage}/>
     </div>
   )
 }

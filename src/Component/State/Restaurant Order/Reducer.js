@@ -8,6 +8,10 @@ const initialState = {
     orders: [],
     loading: false,
     error: null,
+    currentPage: 0,
+    totalPages: 0,
+    totalElements: 0,
+    pageSize: 10  
 };
 
 export const restaurantOrderReducer = (state = initialState, { type, payload }) => {
@@ -22,7 +26,11 @@ export const restaurantOrderReducer = (state = initialState, { type, payload }) 
             return {
                 ...state,
                 loading: false,
-                orders: payload
+                orders: payload.content || [],
+                currentPage: payload.number || 0,
+                totalPages: payload.totalPages || 0,
+                totalElements: payload.totalElements || 0,
+                pageSize: payload.size || 10
             };
         case UPDATE_ORDER_STATUS_SUCCESS:
             return {

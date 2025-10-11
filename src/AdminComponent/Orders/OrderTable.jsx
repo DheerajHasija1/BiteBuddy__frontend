@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Box, Card, CardHeader, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
+import { Box, Card, CardHeader, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination, Stack, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import{fetchRestaurantsOrder} from "../../Component/State/Restaurant Order/Action"
 import { Chip } from '@mui/material';
@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import {updateOrderStatus} from "../../Component/State/Restaurant Order/Action"
 
-const  OrderTable =() => {
+const  OrderTable =({ currentPage = 0, setCurrentPage = () => {} }) => {
     const dispatch = useDispatch();
     const jwt = localStorage.getItem("jwt");
     const {restaurantOrders,restaurant} =useSelector((store) => store);
@@ -22,6 +22,11 @@ const  OrderTable =() => {
    const handleUpdateOrderStatus  =(orderId,orderStatus) =>{
     dispatch(updateOrderStatus({jwt,orderId,orderStatus}))
    }
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value - 1); // MUI Pagination 1-indexed hai, backend 0-indexed
+    }
+
 
     return (
     <Box>
@@ -118,6 +123,22 @@ const  OrderTable =() => {
             </TableBody>
             </Table>
         </TableContainer>
+
+        {restaurantOrders?.totalPages > 1 && (
+                    <Stack spacing={2} sx={{ p: 2, alignItems: 'center' }}>
+                        <Pagination
+                            count={restaurantOrders.totalPages}
+                            page={currentPage + 1}
+                            onChange={handlePageChange}
+                            color="primary"
+                            showFirstButton
+                            showLastButton
+                        />
+                        <Typography variant="body2" color="text.secondary">
+                            Showing {restaurantOrders.orders?.length || 0} of {restaurantOrders.totalElements || 0} orders
+                        </Typography>
+                    </Stack>
+                )}
         </Card>
     </Box>
     )
